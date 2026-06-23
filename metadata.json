@@ -1,0 +1,6 @@
+{
+  "name": "Evalo",
+  "description": "Premium NIELIT Certification Preparation Platform offering curated curriculum analytics and examinations for CCC and O Level tracks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
