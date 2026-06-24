@@ -165,15 +165,16 @@ export default function Landing() {
       </main>
 
       {/* Footer block */}
-      <footer className="border-t border-border bg-card py-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-foreground">Evalo Certification</span>
+      <footer className="border-t border-border bg-card py-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-1 sm:gap-3 text-center sm:text-left">
+            <span className="font-bold text-foreground font-heading">Evalo Certification</span>
+            <span className="hidden sm:inline text-muted-foreground/40">|</span>
             <span>&copy; 2026 Evalo Platforms. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-6">
-            <span className="cursor-not-allowed hover:text-foreground">Course Catalog</span>
-            <span className="cursor-not-allowed hover:text-foreground">Security Policies</span>
+          <div className="flex items-center gap-6 justify-center">
+            <span className="cursor-not-allowed hover:text-foreground transition-colors duration-150">Course Catalog</span>
+            <span className="cursor-not-allowed hover:text-foreground transition-colors duration-150">Security Policies</span>
           </div>
         </div>
       </footer>

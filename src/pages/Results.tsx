@@ -110,7 +110,7 @@ export default function Results() {
     const feedback = getFeedbackMessage(selectedAttempt.percentage);
     
     return (
-      <div className="flex flex-col gap-6 max-w-5xl mx-auto w-full px-1" id="results-detailed-view">
+      <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full" id="results-detailed-view">
         {/* Navigation header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card border border-border p-4 rounded-xl shadow-sm">
           <Button 
@@ -323,7 +323,7 @@ export default function Results() {
   const filteredTests = allTests.filter(test => test.course === courseFilter);
 
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full px-1" id="results-overview-dashboard">
+    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full" id="results-overview-dashboard">
       
       {/* 2. Page Title Block */}
       <div className="bg-card border border-border p-5 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

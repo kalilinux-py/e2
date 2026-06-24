@@ -10,7 +10,8 @@ import {
   Award,
   BookOpen,
   X,
-  FileText
+  FileText,
+  Menu
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../components/ui/card';
@@ -42,6 +43,7 @@ export default function TestWindow() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(test.durationMinutes * 60);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   // Initialize questions once testId loads
   useEffect(() => {
@@ -152,6 +154,15 @@ export default function TestWindow() {
       {/* 1. TOP BAR PANEL: Fixed course summaries & countdown */}
       <header className="h-16 bg-card border-b border-border px-4 md:px-6 flex items-center justify-between z-45 shrink-0" id="test-window-header">
         <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowSidebar(!showSidebar)}
+            className="md:hidden h-8 w-8 text-muted-foreground hover:text-foreground shrink-0"
+            id="mobile-palette-toggle"
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
           <Badge className="text-[9px] uppercase font-bold px-2 py-0.5 bg-primary/10 text-primary border-primary/20 shrink-0">
             {test.course} Course
           </Badge>
@@ -175,12 +186,32 @@ export default function TestWindow() {
       {/* 2. MAIN BODY WRAPPER */}
       <div className="flex-1 overflow-y-auto md:overflow-hidden flex flex-col md:flex-row relative">
         
-        {/* RESPONSIVE LEFT PANEL: Question Navigator Palette (always visible, using clean square boxes) */}
-        <aside className="w-full md:w-64 bg-card border-b md:border-b-0 md:border-r border-border flex flex-col justify-between shrink-0 md:h-full overflow-y-auto z-30">
+        {/* Backdrop for mobile palette */}
+        {showSidebar && (
+          <div 
+            className="fixed inset-0 bg-background/80 backdrop-blur-xs z-40 md:hidden animate-in fade-in duration-200" 
+            onClick={() => setShowSidebar(false)} 
+          />
+        )}
+
+        {/* RESPONSIVE LEFT PANEL: Question Navigator Palette */}
+        <aside className={`fixed inset-y-0 left-0 w-64 h-full bg-card border-r border-border flex flex-col justify-between shrink-0 overflow-y-auto z-50 transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:z-30 ${
+          showSidebar ? 'translate-x-0' : '-translate-x-full'
+        }`}>
           <div className="p-4 md:p-5 flex flex-col gap-3 md:gap-4">
             <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-wider font-mono">
               <span>Question Palette</span>
-              <span className="text-primary font-semibold">{answeredCount} / {questions.length} Solved</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-primary font-semibold">{answeredCount} / {questions.length} Solved</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSidebar(false)}
+                  className="md:hidden h-5 w-5 text-muted-foreground hover:text-foreground p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Squares Grid Map */}
@@ -202,7 +233,10 @@ export default function TestWindow() {
                   <Button
                     key={q.id}
                     variant="ghost"
-                    onClick={() => handleNavToIdx(idx)}
+                    onClick={() => {
+                      handleNavToIdx(idx);
+                      setShowSidebar(false);
+                    }}
                     className={`h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 p-0 rounded-none text-xs font-mono font-bold transition-all tracking-tight ${btnStyle}`}
                   >
                     {idx + 1}
@@ -211,10 +245,10 @@ export default function TestWindow() {
               })}
             </div>
 
-            <Separator className="my-2 hidden md:block" />
+            <Separator className="my-2" />
 
             {/* Legend Explaining States */}
-            <div className="hidden md:flex flex-col gap-2.5 text-[10px] text-muted-foreground font-semibold font-mono">
+            <div className="flex flex-col gap-2.5 text-[10px] text-muted-foreground font-semibold font-mono">
               <div className="flex items-center gap-2">
                 <div className="h-3 w-3 rounded-none bg-primary" />
                 <span>Answered ({answeredCount})</span>
@@ -231,7 +265,7 @@ export default function TestWindow() {
 
           </div>
 
-          <div className="hidden md:block p-4 bg-muted/20 border-t border-border mt-auto">
+          <div className="p-4 bg-muted/20 border-t border-border mt-auto">
             <span className="text-[9px] text-muted-foreground font-mono uppercase font-semibold">
               SECURE ASSESSMENT INTEGRITY ACTIVE
             </span>
@@ -301,7 +335,7 @@ export default function TestWindow() {
       </div>
 
       {/* 3. BOTTOM PANEL: Navigation & Submit actions */}
-      <footer className="h-20 bg-card border-t border-border px-4 md:px-6 flex items-center justify-between z-40 shrink-0">
+      <footer className="h-20 bg-card border-t border-border px-4 md:px-6 flex items-center justify-between gap-2 z-40 shrink-0">
         
         {/* Previous Button link */}
         <Button
@@ -309,7 +343,7 @@ export default function TestWindow() {
           size="sm"
           disabled={currentIndex <= 0}
           onClick={() => handleNavToIdx(currentIndex - 1)}
-          className="text-xs h-9 px-3 md:px-4 rounded-lg font-semibold"
+          className="text-xs h-9 px-3 md:px-4 rounded-lg font-semibold shrink-0"
         >
           <ChevronLeft className="h-4 w-4 mr-1 text-foreground" />
           <span className="hidden sm:inline">Previous Question</span>
@@ -319,10 +353,11 @@ export default function TestWindow() {
         {/* Central Submit CTA */}
         <Button
           onClick={() => setShowSubmitConfirm(true)}
-          className="text-xs font-bold uppercase tracking-wider h-10 px-5 md:px-8 rounded-lg bg-primary text-primary-foreground shadow-sm"
+          className="text-xs font-bold uppercase tracking-wider h-10 px-4 sm:px-8 rounded-lg bg-primary text-primary-foreground shadow-sm shrink-0"
         >
-          <CheckSquare className="h-4 w-4 mr-2" />
-          <span>Save & Complete Exam</span>
+          <CheckSquare className="h-4 w-4 mr-1.5 sm:mr-2 inline" />
+          <span className="hidden sm:inline">Save & Complete Exam</span>
+          <span className="sm:hidden">Complete</span>
         </Button>
 
         {/* Next Button link */}
@@ -331,7 +366,7 @@ export default function TestWindow() {
           size="sm"
           disabled={currentIndex >= questions.length - 1}
           onClick={() => handleNavToIdx(currentIndex + 1)}
-          className="text-xs h-9 px-3 md:px-4 rounded-lg font-semibold"
+          className="text-xs h-9 px-3 md:px-4 rounded-lg font-semibold shrink-0"
         >
           <span className="hidden sm:inline">Next Question</span>
           <span className="sm:hidden">Next</span>

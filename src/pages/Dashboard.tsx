@@ -67,39 +67,54 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
-      
-      {/* Header section with welcome banner */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card border border-border p-5 rounded-2xl shadow-sm">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="text-xs bg-primary text-primary-foreground font-bold font-mono px-2 py-0.5 rounded uppercase tracking-wider">
-              Student Hub
-            </span>
-            <span className="text-[10px] text-muted-foreground">• Active Practice Profile</span>
-          </div>
-          <h2 className="text-2xl font-bold tracking-tight font-heading text-foreground">
-            Welcome back, {(user.name || 'Student').split(' ')[0]}
-          </h2>
-          <p className="text-xs text-muted-foreground">
-            Complete your current syllabus targets below.
-          </p>
-        </div>
-        <div className="w-full md:w-auto flex gap-2">
-          <Link to="/tests" className="w-full md:w-auto">
-            <Button size="sm" className="w-full md:w-auto gap-1.5 text-xs font-semibold">
-              <BookOpen className="h-4 w-4" />
-              <span>Explore Courses & Tests</span>
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Main Bento grid layout - dense & beautiful */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full" id="dashboard-bento-viewport">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[minmax(160px,auto)] gap-6">
         
-        {/* Bento Cell 1: Total Assessments Completed */}
-        <Card className="bg-card border border-border rounded-2xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden h-[155px]">
+        {/* Card 1 (Welcome Banner) */}
+        <Card className="col-span-full lg:col-span-3 lg:row-span-1 bg-card text-card-foreground border shadow-sm rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden" id="dashboard-bento-welcome">
+          <div className="space-y-1 z-10 w-full md:w-auto">
+            <div className="flex items-center gap-2">
+              <span className="text-xs bg-primary text-primary-foreground font-bold font-mono px-2 py-0.5 rounded uppercase tracking-wider">
+                Student Hub
+              </span>
+              <span className="text-[10px] text-muted-foreground">• Active Practice Profile</span>
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight font-heading text-foreground">
+              Welcome back, {(user.name || 'Aditya').split(' ')[0]}
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Complete your current syllabus targets below.
+            </p>
+          </div>
+          <div className="w-full md:w-auto flex gap-2 z-10">
+            <Link to="/tests" className="w-full md:w-auto">
+              <Button size="sm" className="w-full md:w-auto gap-1.5 text-xs font-semibold">
+                <BookOpen className="h-4 w-4" />
+                <span>Explore Courses & Tests</span>
+              </Button>
+            </Link>
+          </div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        </Card>
+
+        {/* Card 2 (Main Stat - Average Accuracy) */}
+        <Card className="col-span-full sm:col-span-1 lg:col-span-1 lg:row-span-2 flex flex-col justify-center items-center text-center p-6 bg-card text-card-foreground border shadow-sm rounded-xl relative overflow-hidden" id="dashboard-bento-accuracy">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+          <div className="p-2.5 bg-secondary text-secondary-foreground rounded-full border border-border mb-2.5">
+            <Percent className="h-5 w-5 text-primary" />
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">Average Accuracy</span>
+          <h3 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground font-mono my-2 select-none">
+            {avgAccuracy}%
+          </h3>
+          <div className="text-xs text-muted-foreground">
+            <span>Minimum Pass: 50%</span>
+            <div className="font-semibold text-foreground mt-0.5">Grade {readinessGrade}</div>
+          </div>
+        </Card>
+
+        {/* Card 3 (Small Stat - Completed Exams) */}
+        <Card className="col-span-1 lg:col-span-1 lg:row-span-1 bg-card text-card-foreground border shadow-sm rounded-xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden" id="dashboard-bento-completed">
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
           <div className="flex justify-between items-start">
             <div className="flex flex-col gap-1">
@@ -112,34 +127,14 @@ export default function Dashboard() {
               <Trophy className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-[11px] text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
+          <div className="text-[11px] text-muted-foreground pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-1">
             <span className="font-semibold text-foreground">Active syllabus</span>
             <span className="text-[10px] font-mono">100% Validated</span>
           </div>
         </Card>
 
-        {/* Bento Cell 2: Average Accuracy */}
-        <Card className="bg-card border border-border rounded-2xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden h-[155px]">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">Average Accuracy</span>
-              <span className="text-3xl font-extrabold tracking-tight text-foreground font-mono leading-none">
-                {avgAccuracy}%
-              </span>
-            </div>
-            <div className="p-2 bg-secondary text-secondary-foreground rounded-lg border border-border">
-              <Percent className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="text-[11px] text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
-            <span>Minimum Pass: 50%</span>
-            <span className="font-medium text-foreground">Grade {readinessGrade}</span>
-          </div>
-        </Card>
-
-        {/* Bento Cell 3: Practice Time Hours */}
-        <Card className="bg-card border border-border rounded-2xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden h-[155px]">
+        {/* Card 4 (Small Stat - Practice Time) */}
+        <Card className="col-span-1 lg:col-span-1 lg:row-span-1 bg-card text-card-foreground border shadow-sm rounded-xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden" id="dashboard-bento-time">
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
           <div className="flex justify-between items-start">
             <div className="flex flex-col gap-1">
@@ -152,7 +147,7 @@ export default function Dashboard() {
               <Hourglass className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-[11px] text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
+          <div className="text-[11px] text-muted-foreground pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-1">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" /> Updated Live
             </span>
@@ -160,8 +155,8 @@ export default function Dashboard() {
           </div>
         </Card>
 
-        {/* Bento Cell 4: Exam Readiness Grade */}
-        <Card className="bg-card border border-border rounded-2xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden h-[155px] ring-1 ring-primary/40">
+        {/* Card 5 (Exam Readiness) */}
+        <Card className="col-span-full sm:col-span-1 lg:col-span-1 lg:row-span-1 bg-card text-card-foreground border shadow-sm rounded-xl p-5 flex flex-col justify-between group hover:border-primary/45 transition-all duration-150 relative overflow-hidden ring-1 ring-primary/40" id="dashboard-bento-readiness">
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
           <div className="flex justify-between items-start">
             <div className="flex flex-col gap-1">
@@ -174,112 +169,157 @@ export default function Dashboard() {
               <Bookmark className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-[11px] text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
+          <div className="text-[11px] text-muted-foreground pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-1">
             <span>Syllabus Aligned</span>
             <Badge variant="outline" className="text-[9px] h-4 px-1.5 p-0 font-bold bg-primary/5 border-primary/20 text-primary">NIELIT A+ PRO</Badge>
           </div>
         </Card>
 
-      </div>
+        {/* Card 6 (Streak/Focus Area) */}
+        <Card className="col-span-full lg:col-span-1 lg:row-span-2 bg-card text-card-foreground border shadow-sm rounded-xl p-5 flex flex-col justify-between overflow-hidden" id="dashboard-bento-focus">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">Current Focus</span>
+              <Target className="h-4 w-4 text-primary shrink-0" />
+            </div>
 
-      {/* Advanced Full Width Recent Performance Logs & Results Ledger */}
-      <Card className="w-full bg-card border border-border rounded-2xl flex flex-col overflow-hidden shadow-sm">
-        <CardHeader className="p-5 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/50">
-          <div className="space-y-1">
-            <CardTitle className="text-base font-bold font-heading text-foreground tracking-tight">Recent Exam Attempts & Results Ledger</CardTitle>
-            <CardDescription className="text-xs text-muted-foreground mt-0.5">Your official curriculum practice logs and certification readiness assessments.</CardDescription>
+            <div className="space-y-4">
+              <div>
+                <Badge variant="outline" className="text-[10px] font-sans font-extrabold uppercase bg-primary/10 text-primary border-primary/20 mb-1.5">
+                  {enrolledCourse} Target Syllabus
+                </Badge>
+                <p className="text-xs font-bold leading-tight text-foreground">
+                  {enrolledCourse === 'CCC' 
+                    ? 'Course on Computer Concepts' 
+                    : 'IT Tools Certification'}
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Practicing active modules to maximize examination scores and pass-readiness.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground font-mono block">Recommended Modules</span>
+                <div className="space-y-1.5">
+                  {(enrolledCourse === 'CCC' ? [
+                    'LibreOffice Writer & Calc',
+                    'GUI Operating Systems',
+                    'E-Governance Services',
+                    'Cyber Security Basics'
+                  ] : [
+                    'IT Tools & Network Basics',
+                    'Web Design & Publishing',
+                    'Python Programming Core',
+                    'Internet of Things (IoT)'
+                  ]).map((mod, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs text-foreground bg-muted/40 p-2 rounded-lg border border-border/30">
+                      <span className="font-mono text-[9px] text-primary font-black bg-primary/10 h-4 w-4 rounded flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+                      <span className="truncate font-semibold text-[11px]">{mod}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          <Link to="/attempts" className="shrink-0">
-            <Button variant="outline" size="sm" className="text-xs font-bold gap-1.5 h-8 border-border hover:bg-muted/40">
-              <span>View Practice History</span>
-              <ChevronsRight className="h-3.5 w-3.5" />
-            </Button>
-          </Link>
-        </CardHeader>
-        
-        <div className="flex-1 w-full overflow-x-auto">
-          {recentAttempts.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center p-12 text-center text-muted-foreground min-h-[220px]">
-              <Clock className="h-10 w-10 text-muted/60 mb-2 animate-pulse" />
-              <p className="text-xs font-bold text-foreground">No recent evaluation records found</p>
-              <p className="text-[11px] text-muted-foreground mt-1 max-w-xs mx-auto">Complete your first active training assessment in the syllabus catalog to populate your ledger metrics.</p>
-              <Link to="/tests" className="mt-4">
-                <Button size="sm" className="text-xs font-semibold">Browse Syllabus Catalog</Button>
+
+          <div className="mt-4 pt-3 border-t border-border/40 text-[10px] text-muted-foreground font-mono flex items-center justify-between">
+            <span>Syllabus Compliance</span>
+            <span className="text-primary font-bold">100% Core</span>
+          </div>
+        </Card>
+
+        {/* Card 7 (Recent Exam Attempts Ledger) */}
+        <Card className="col-span-full lg:col-span-3 lg:row-span-2 bg-card text-card-foreground border shadow-sm rounded-xl flex flex-col justify-between overflow-hidden" id="dashboard-bento-ledger">
+          <div className="flex flex-col flex-1">
+            <div className="p-6 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="text-base font-bold font-heading text-foreground tracking-tight">Recent Exam Attempts & Results Ledger</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Your official practice logs and certification readiness assessments.</p>
+              </div>
+              <Link to="/attempts" className="shrink-0">
+                <Button variant="outline" size="sm" className="text-xs font-bold gap-1.5 h-8 border-border hover:bg-muted/40">
+                  <span>View Practice History</span>
+                  <ChevronsRight className="h-3.5 w-3.5" />
+                </Button>
               </Link>
             </div>
-          ) : (
-            <table className="w-full text-left border-collapse text-xs min-w-[600px] sm:min-w-0">
-              <thead>
-                <tr className="bg-muted/30 border-b border-border/50 text-[10px] uppercase font-bold text-muted-foreground">
-                  <th className="p-4 pl-6 whitespace-nowrap">Date & Time</th>
-                  <th className="p-4">Course / Syllabus Title</th>
-                  <th className="p-4 text-center whitespace-nowrap">Score Ratio</th>
-                  <th className="p-4 text-center whitespace-nowrap">Time Used</th>
-                  <th className="p-4 text-right pr-6 whitespace-nowrap">Certification Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/20">
-                {recentAttempts.map((att) => (
-                  <tr 
-                    key={att.id} 
-                    onClick={() => navigate(`/results?attemptId=${att.id}`)}
-                    className="hover:bg-muted/40 cursor-pointer transition-colors group"
-                  >
-                    <td className="p-4 pl-6 font-mono text-muted-foreground tracking-tight text-[11px] whitespace-nowrap">
-                      {formatDate(att.date)}
-                    </td>
-                    <td className="p-4 font-semibold text-foreground">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="truncate max-w-xs sm:max-w-md group-hover:text-primary transition-colors">{att.testTitle}</span>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <Badge variant="secondary" className="text-[9px] font-mono leading-none py-0.5 px-1 rounded font-bold border border-border">
+            
+            <div className="flex-1 w-full px-6 overflow-y-auto">
+              {recentAttempts.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center p-8 text-center text-muted-foreground min-h-[160px]">
+                  <Clock className="h-8 w-8 text-muted/60 mb-2 animate-pulse" />
+                  <p className="text-xs font-bold text-foreground">No recent evaluation records found</p>
+                  <p className="text-[11px] text-muted-foreground mt-1 max-w-xs mx-auto">Complete your first active training assessment to populate your ledger.</p>
+                  <Link to="/tests" className="mt-4">
+                    <Button size="sm" className="text-xs font-semibold">Browse Syllabus Catalog</Button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col">
+                  {recentAttempts.map((att) => (
+                    <div 
+                      key={att.id} 
+                      onClick={() => navigate(`/results?attemptId=${att.id}`)}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-b border-border/50 hover:bg-muted/30 cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
+                    >
+                      <div className="flex flex-col gap-1 min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-mono text-muted-foreground tracking-tight text-[11px]">
+                            {formatDate(att.date)}
+                          </span>
+                          <Badge variant="secondary" className="text-[9px] font-mono py-0.5 px-1 rounded font-bold border border-border">
                             {att.course}
                           </Badge>
-                          <span className="text-[10px] text-muted-foreground font-normal">Syllabus Track</span>
                         </div>
+                        <span className="font-semibold text-foreground text-xs truncate">
+                          {att.testTitle}
+                        </span>
                       </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-col items-center justify-center gap-1">
-                        <span className="font-mono font-black text-foreground text-xs text-center whitespace-nowrap">{att.score} / {att.totalQuestions} ({att.percentage}%)</span>
-                        <div className="h-1 text-primary-muted w-16 bg-muted rounded-full overflow-hidden border border-border/10 hidden sm:block">
-                          <div 
-                            className={`h-full rounded-full transition-all duration-300 ${att.passed ? 'bg-primary' : 'bg-destructive'}`}
-                            style={{ width: `${att.percentage}%` }}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4 text-center font-mono text-foreground font-semibold text-[11px] whitespace-nowrap">
-                      {formatTime(att.durationSecondsUsed)}
-                    </td>
-                    <td className="p-4 text-right pr-6">
-                      <Badge 
-                        className={`text-[9px] tracking-wide font-bold uppercase py-0.5 px-2 rounded-full border ${
-                          att.passed 
-                            ? 'bg-primary/10 text-primary border-primary/20' 
-                            : 'bg-destructive/10 text-destructive border-destructive/20'
-                        }`}
-                      >
-                        {att.passed ? 'PASSED' : 'RETRY'}
-                      </Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-        
-        <div className="p-4 bg-muted/20 border-t border-border flex flex-col sm:flex-row items-center justify-between text-[11px] text-muted-foreground px-6 gap-2 shrink-0">
-          <span className="flex items-center gap-1.5 font-medium">
-            <Zap className="w-3.5 h-3.5 text-primary" /> 
-            <span>Active learning sync active. Selected syllabus results are updated in real-time.</span>
-          </span>
-          <span className="font-mono text-[9px] uppercase font-bold tracking-widest text-primary">NIELIT PLATFORM REGISTERED</span>
-        </div>
-      </Card>
 
+                      <div className="flex items-center gap-4 sm:gap-6 shrink-0 justify-between sm:justify-start">
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="font-mono font-black text-foreground text-xs">
+                            {att.score} / {att.totalQuestions}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">({att.percentage}%)</span>
+                        </div>
+                        
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="font-mono text-[11px] text-foreground font-semibold">
+                            {formatTime(att.durationSecondsUsed)}
+                          </span>
+                          <span className="text-[9px] text-muted-foreground uppercase font-semibold">Time Used</span>
+                        </div>
+
+                        <Badge 
+                          className={`text-[9px] tracking-wide font-bold uppercase py-0.5 px-2 rounded-full border shrink-0 ${
+                            att.passed 
+                              ? 'bg-primary/10 text-primary border-primary/20' 
+                              : 'bg-destructive/10 text-destructive border-destructive/20'
+                          }`}
+                        >
+                          {att.passed ? 'PASSED' : 'RETRY'}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="p-4 bg-muted/20 border-t border-border mt-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-muted-foreground px-6 gap-2 shrink-0">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Zap className="w-3.5 h-3.5 text-primary" /> 
+              <span>Active learning sync active. Selected syllabus results are updated in real-time.</span>
+            </span>
+            <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-primary">NIELIT PLATFORM</span>
+          </div>
+        </Card>
+
+      </div>
     </div>
   );
 }
